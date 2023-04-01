@@ -1,8 +1,7 @@
 package com.example.homeworkwithmockito.excetions;
 
-public class EmployeeStorageIsFullException extends RuntimeException {
-
-    public EmployeeStorageIsFullException(String message) {
-        super(message);
+public class EmployeeStorageIsFullException extends EmployeeException {
+    public EmployeeStorageIsFullException(String message, int errorCode) {
+        super(message, errorCode);
     }
 }
