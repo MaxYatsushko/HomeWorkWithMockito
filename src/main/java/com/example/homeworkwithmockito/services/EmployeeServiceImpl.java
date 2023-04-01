@@ -120,4 +120,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (!isUpperCaseFisrtChar(lastName))
             throw new InvalidStringDataException("Фамилия сотрудника должна начинаться с заглавной буквы", 222);
     }
+
+    @Override
+    public void init() {
+        employees.clear();
+    }
 }

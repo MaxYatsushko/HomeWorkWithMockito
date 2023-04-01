@@ -10,4 +10,5 @@ public interface EmployeeService {
     Employee find(String firstName, String lastName);
     Employee remove(String firstName, String lastName);
     List<Employee> getAll();
+    void init();
 }
