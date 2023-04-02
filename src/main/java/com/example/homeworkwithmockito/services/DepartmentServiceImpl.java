@@ -44,4 +44,29 @@ public class DepartmentServiceImpl implements DepartmentService {
                         Collectors.mapping(e -> e, Collectors.toList()))
                 );
     }
+
+    @Override
+    public String getSumSalary(int departmentId) {
+        return employeeService.getAll().stream()
+                .filter(employee -> employee.getDepartment().getId() == departmentId)
+                .collect(Collectors.summingDouble(Employee :: getSalary)).toString();
+    }
+    @Override
+    public String getMinSalary(int departmentId) {
+        Employee employee = employeeService.getAll().stream()
+                .filter(emp -> emp.getDepartment().getId() == departmentId)
+                .min(Comparator.comparing(Employee::getSalary))
+                .orElseThrow(() -> new DepartmentSearchException("Департамент не найден", 555));
+
+        return String.valueOf(employee.getSalary());
+    }
+    @Override
+    public String getMaxSalary(int departmentId) {
+        Employee employee = employeeService.getAll().stream()
+                .filter(emp -> emp.getDepartment().getId() == departmentId)
+                .max(Comparator.comparing(Employee::getSalary))
+                .orElseThrow(() -> new DepartmentSearchException("Департамент не найден", 555));
+
+        return String.valueOf(employee.getSalary());
+    }
 }

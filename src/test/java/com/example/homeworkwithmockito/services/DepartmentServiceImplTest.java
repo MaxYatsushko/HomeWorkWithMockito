@@ -170,4 +170,129 @@ public class DepartmentServiceImplTest {
         Map<String, List<Employee>> actualEmployees = departmentService.getAll(departmentId);
         assertEquals(expectedEmployees, actualEmployees);
     }
+
+    @Test
+    void getSumSalary_success(){
+        Integer departmentId = 1;
+        float Salary1 = 70000f;
+        float Salary2 = 96500f;
+        List<Employee> employees = new ArrayList<>();
+        Employee workerBuh = new Employee("Инна", "Иванова", Salary1, DEPARTMENT_BY_ID.get(departmentId));
+        Employee workerBuh2 = new Employee("Марья", "Петрова", Salary2, DEPARTMENT_BY_ID.get(departmentId));
+
+        employees.add(workerBuh);
+        employees.add(workerBuh2);
+
+        float expectedSumSalary = 0;
+        for (Employee emp: employees) {
+            expectedSumSalary += emp.getSalary();
+        }
+        String expectedSumSalaryString = String.valueOf(expectedSumSalary);
+
+        when(employeeService.getAll()).thenReturn(employees);
+
+        String actualSumSalaryString = departmentService.getSumSalary(departmentId);
+        assertEquals(expectedSumSalaryString, actualSumSalaryString);
+    }
+
+    @Test
+    void getMaxSalary_success(){
+        Integer departmentId = 1;
+        float Salary1 = 70000f;
+        float Salary2 = 96500f;
+        List<Employee> employees = new ArrayList<>();
+        Employee workerBuh = new Employee("Инна", "Иванова", Salary1, DEPARTMENT_BY_ID.get(departmentId));
+        Employee workerBuh2 = new Employee("Марья", "Петрова", Salary2, DEPARTMENT_BY_ID.get(departmentId));
+
+        employees.add(workerBuh);
+        employees.add(workerBuh2);
+
+        float maxSalary = Float.MIN_VALUE;
+        for (Employee emp: employees) {
+            if(maxSalary < emp.getSalary())
+                maxSalary = emp.getSalary();
+        }
+        String expectedMaxSalaryString = String.valueOf(maxSalary);
+
+        when(employeeService.getAll()).thenReturn(employees);
+
+        String actualMaxSalaryString = departmentService.getMaxSalary(departmentId);
+        assertEquals(expectedMaxSalaryString, actualMaxSalaryString);
+    }
+
+    @Test
+    void getMinSalary_success(){
+        Integer departmentId = 1;
+        float Salary1 = 70000f;
+        float Salary2 = 96500f;
+        List<Employee> employees = new ArrayList<>();
+        Employee workerBuh = new Employee("Инна", "Иванова", Salary1, DEPARTMENT_BY_ID.get(departmentId));
+        Employee workerBuh2 = new Employee("Марья", "Петрова", Salary2, DEPARTMENT_BY_ID.get(departmentId));
+
+        employees.add(workerBuh);
+        employees.add(workerBuh2);
+
+        float minSalary = Float.MAX_VALUE;
+        for (Employee emp: employees) {
+            if(minSalary > emp.getSalary())
+                minSalary = emp.getSalary();
+        }
+        String expectedMinSalaryString = String.valueOf(minSalary);
+
+        when(employeeService.getAll()).thenReturn(employees);
+
+
+        String actualMaxSalaryString = departmentService.getMinSalary(departmentId);
+        assertEquals(expectedMinSalaryString, actualMaxSalaryString);
+    }
+
+    @Test
+    void getMinSalary_withDepartmentSearch(){
+        Integer departmentId = 1;
+
+        when(employeeService.getAll()).thenReturn(Collections.emptyList());
+        String expectedError = "Департамент не найден";
+
+        Exception exception = assertThrows(DepartmentSearchException.class, () -> departmentService.getMinSalary(departmentId));
+        assertEquals(expectedError, exception.getMessage());
+    }
+
+    @Test
+    void getMaxSalary_withDepartmentSearch(){
+        Integer departmentId = 1;
+
+        when(employeeService.getAll()).thenReturn(Collections.emptyList());
+        String expectedError = "Департамент не найден";
+
+        Exception exception = assertThrows(DepartmentSearchException.class, () -> departmentService.getMaxSalary(departmentId));
+        assertEquals(expectedError, exception.getMessage());
+    }
 }
+
+
+/*
+    @Override
+    public String getSumSalary(int departmentId) {
+        return employeeService.getAll().stream()
+                .filter(employee -> employee.getDepartment().getId() == departmentId)
+                .collect(Collectors.summingDouble(Employee :: getSalary)).toString();
+    }
+    @Override
+    public String getMinSalary(int departmentId) {
+        Employee employee = employeeService.getAll().stream()
+                .filter(emp -> emp.getDepartment().getId() == departmentId)
+                .min(Comparator.comparing(Employee::getSalary))
+                .orElseThrow(() -> new DepartmentSearchException("Департамент не найден", 555));
+
+        return String.valueOf(employee.getSalary());
+    }
+    @Override
+    public String getMaxSalary(int departmentId) {
+        Employee employee = employeeService.getAll().stream()
+                .filter(emp -> emp.getDepartment().getId() == departmentId)
+                .max(Comparator.comparing(Employee::getSalary))
+                .orElseThrow(() -> new DepartmentSearchException("Департамент не найден", 555));
+
+        return String.valueOf(employee.getSalary());
+    }
+ */
