@@ -35,8 +35,27 @@ public class DepartmentController {
         return departmentServiceImpl.getEmployeeWithMinSalary(departmentId);
     }
 
-    @GetMapping(path = "/all")
-    public Map<String, List<Employee>> allByDepartmentId(@RequestParam(required = false) Integer departmentId) {
+    @GetMapping(path = "/{id}/employees")
+    public Map<String, List<Employee>> allByDepartmentId(@PathVariable("id") Integer departmentId) {
         return departmentServiceImpl.getAll(departmentId);
+    }
+
+    @GetMapping(path = "/employees")
+    public Map<String, List<Employee>> all() {
+        return departmentServiceImpl.getAll(null);
+    }
+
+    @GetMapping(path = "/{id}/salary/sum")
+    public String getSumSalary(@PathVariable("id") Integer departmentId) {
+        return departmentServiceImpl.getSumSalary(departmentId);
+    }
+    @GetMapping(path = "/{id}/salary/min")
+    public String getMaxSalary(@PathVariable("id") Integer departmentId) {
+        return departmentServiceImpl.getMinSalary(departmentId);
+    }
+
+    @GetMapping(path = "/{id}/salary/max")
+    public String getMinSalary(@PathVariable("id") Integer departmentId) {
+        return departmentServiceImpl.getMaxSalary(departmentId);
     }
 }
