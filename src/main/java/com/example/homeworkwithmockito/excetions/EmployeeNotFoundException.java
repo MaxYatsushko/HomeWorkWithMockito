@@ -1,8 +1,7 @@
 package com.example.homeworkwithmockito.excetions;
 
-public class EmployeeNotFoundException extends RuntimeException {
-
-    public EmployeeNotFoundException(String message) {
-        super(message);
+public class EmployeeNotFoundException extends EmployeeException {
+    public EmployeeNotFoundException(String message, int errorCode) {
+        super(message, errorCode);
     }
 }
